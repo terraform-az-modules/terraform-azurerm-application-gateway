@@ -3,8 +3,8 @@
 ##-----------------------------------------------------------------------------
 
 module "labels" {
-  source          = "terraform-az-modules/tags/azurerm"
-#   version         = "1.0.0"
+  source = "terraform-az-modules/tags/azurerm"
+  #   version         = "1.0.0"
   name            = var.custom_name == null ? var.name : var.custom_name
   location        = var.location
   environment     = var.environment
@@ -33,7 +33,7 @@ resource "azurerm_public_ip" "pip" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_application_gateway" "main" {
   count               = var.enabled ? 1 : 0
-  name                = var.resource_position_prefix ? format("appgw-%s", local.name) : format("%s-appgw", local.name )
+  name                = var.resource_position_prefix ? format("appgw-%s", local.name) : format("%s-appgw", local.name)
   resource_group_name = var.resource_group_name
   location            = local.location
   enable_http2        = var.enable_http2
@@ -366,7 +366,7 @@ resource "azurerm_application_gateway" "main" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_user_assigned_identity" "identity" {
   count               = var.identity_ids != null ? 0 : 1
-  name                = var.resource_position_prefix ? format("uai-appgw-%s", local.name) : format("%s-uai-appgw", local.name )
+  name                = var.resource_position_prefix ? format("uai-appgw-%s", local.name) : format("%s-uai-appgw", local.name)
   location            = local.location
   resource_group_name = var.resource_group_name
 }
@@ -408,12 +408,12 @@ resource "azurerm_monitor_diagnostic_setting" "appgw-law" {
   target_resource_id         = azurerm_application_gateway.main[0].id
   log_analytics_workspace_id = var.workspace_id
 
-#   dynamic "enabled_log" {
-#     for_each = ["ApplicationGatewayAccessLog", "ApplicationGatewayPerformanceLog", "ApplicationGatewayFirewallLog"]
-#     content {
-#       category = enabled_log.value
-#     }
-#   }
+  #   dynamic "enabled_log" {
+  #     for_each = ["ApplicationGatewayAccessLog", "ApplicationGatewayPerformanceLog", "ApplicationGatewayFirewallLog"]
+  #     content {
+  #       category = enabled_log.value
+  #     }
+  #   }
 
   dynamic "enabled_log" {
     for_each = var.appgw_logs.enabled ? var.appgw_logs.category != null ? var.appgw_logs.category : var.appgw_logs.category_group : []

@@ -99,7 +99,7 @@ variable "backend_address_pools" {
     ip_addresses = optional(list(string))
   }))
   description = "List of backend address pools"
-  default = []
+  default     = []
 }
 
 
@@ -530,8 +530,8 @@ variable "appgw_logs" {
   })
 
   default = {
-    enabled        = true
-    category       = ["ApplicationGatewayAccessLog", "ApplicationGatewayPerformanceLog", "ApplicationGatewayFirewallLog"]
+    enabled  = true
+    category = ["ApplicationGatewayAccessLog", "ApplicationGatewayPerformanceLog", "ApplicationGatewayFirewallLog"]
   }
   description = "values for Application gateway logs. The `category` attribute is optional and can be used to specify which categories of logs to enable. If not specified, all categories will be enabled."
 }

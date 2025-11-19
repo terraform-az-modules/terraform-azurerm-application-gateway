@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 data "azurerm_client_config" "current_client_config" {
-  
+
 }
 
 ##-----------------------------------------------------------------------------
@@ -133,8 +133,8 @@ module "application-gateway" {
   environment         = local.environment
   subnet_id           = module.subnet.subnet_ids["subnet2"]
   # virtual_network_id  = module.vnet.vnet_id
-  enable_diagnostic   = true
-  workspace_id        = module.log-analytics.workspace_id
+  enable_diagnostic = true
+  workspace_id      = module.log-analytics.workspace_id
 
   sku = {
     name     = "Standard_v2"
@@ -204,7 +204,7 @@ module "application-gateway" {
   http_listeners = [
     {
       name                           = "appgw-testgatewayhtln"
-      frontend_ip_configuration_name = "sappgw-feip"       # Using publicfront end ip name as http listener 
+      frontend_ip_configuration_name = "sappgw-feip"      # Using publicfront end ip name as http listener 
       frontend_port_name             = "sappgw-feport-80" # Assign from frontend_port_settings
       ssl_certificate_name           = null
       host_name                      = null
