@@ -4,7 +4,7 @@
 
 module "labels" {
   source = "terraform-az-modules/tags/azurerm"
-  #   version         = "1.0.0"
+  version         = "1.0.2"
   name            = var.custom_name == null ? var.name : var.custom_name
   location        = var.location
   environment     = var.environment
@@ -127,7 +127,7 @@ resource "azurerm_application_gateway" "main" {
       pick_host_name_from_backend_address = lookup(backend_http_settings.value, "pick_host_name_from_backend_address", false)
 
       dynamic "authentication_certificate" {
-        for_each = backend_http_settings.value.authentication_certificate[*]
+        for_each = backend_http_settings.value.authentication_certificate != null ? [backend_http_settings.value.authentication_certificate] : []
         content {
           name = authentication_certificate.value.name
         }
@@ -136,7 +136,7 @@ resource "azurerm_application_gateway" "main" {
       trusted_root_certificate_names = lookup(backend_http_settings.value, "trusted_root_certificate_names", null)
 
       dynamic "connection_draining" {
-        for_each = backend_http_settings.value.connection_draining[*]
+                for_each = backend_http_settings.value.connection_draining != null ? [backend_http_settings.value.connection_draining] : []
         content {
           enabled           = connection_draining.value.enable_connection_draining
           drain_timeout_sec = connection_draining.value.drain_timeout_sec

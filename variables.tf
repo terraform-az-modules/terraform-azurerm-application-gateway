@@ -325,7 +325,6 @@ variable "existing_private_dns_zone" {
 }
 
 variable "diff_sub" {
-  # To be set true when hosted DNS zone is in different subnscription.
   type        = bool
   default     = false
   description = "Flag to tell whether dns zone is in different sub or not."
@@ -495,13 +494,13 @@ variable "enabled" {
 variable "enable_diagnostic" {
   type        = bool
   default     = false
-  description = "Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.."
+  description = "Set to false to prevent the module from creating the diagnostic setting for the NSG Resource.."
 }
 
 variable "workspace_id" {
   type        = string
   default     = null
-  description = "log analytics workspace id to pass it to destination details of diagnosys setting of NSG."
+  description = "log analytics workspace id to pass it to destination details of diagnostic setting of NSG."
 }
 
 variable "instance_count" {
@@ -513,7 +512,7 @@ variable "instance_count" {
 variable "gateway_ip_configuration_name" {
   type        = string
   default     = "appgw-gwipc"
-  description = "Gateway ip configuratuio name"
+  description = "Gateway ip configuration name"
 }
 
 variable "metric_enabled" {

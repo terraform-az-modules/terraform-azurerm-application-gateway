@@ -147,6 +147,7 @@ module "application-gateway" {
     protocol            = "Http"
     host                = "127.0.0.1"
     path                = "/"
+    port                = 80
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3
