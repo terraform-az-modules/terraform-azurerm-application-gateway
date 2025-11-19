@@ -408,13 +408,6 @@ resource "azurerm_monitor_diagnostic_setting" "appgw-law" {
   target_resource_id         = azurerm_application_gateway.main[0].id
   log_analytics_workspace_id = var.workspace_id
 
-  #   dynamic "enabled_log" {
-  #     for_each = ["ApplicationGatewayAccessLog", "ApplicationGatewayPerformanceLog", "ApplicationGatewayFirewallLog"]
-  #     content {
-  #       category = enabled_log.value
-  #     }
-  #   }
-
   dynamic "enabled_log" {
     for_each = var.appgw_logs.enabled ? var.appgw_logs.category != null ? var.appgw_logs.category : var.appgw_logs.category_group : []
     content {

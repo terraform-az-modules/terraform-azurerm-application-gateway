@@ -12,5 +12,4 @@ locals {
   private_link_configuration_name = "pvt-link"
   location                        = var.location
   subnet_id                       = var.subnet_id
-  # private_dns_zone_name = var.enable_private_endpoint ? var.existing_private_dns_zone == null ? azurerm_private_dns_zone.dnszone[0].name : var.existing_private_dns_zone : null
 }
