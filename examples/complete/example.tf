@@ -235,7 +235,7 @@ module "application-gateway" {
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
   source  = "clouddrove/virtual-machine/azure"
-  version = "2.0.3"
+  version = "2.0.5"
   #   depends_on          = [module.key_vault]
   name                = local.name
   environment         = local.environment
