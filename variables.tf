@@ -318,18 +318,6 @@ variable "private_endpoint_subnet_id" {
   description = "Subnet ID for private endpoint"
 }
 
-variable "existing_private_dns_zone" {
-  type        = string
-  default     = null
-  description = "value of existing private dns zone"
-}
-
-variable "diff_sub" {
-  type        = bool
-  default     = false
-  description = "Flag to tell whether dns zone is in different sub or not."
-}
-
 variable "appgw_private" {
   type        = bool
   default     = false
