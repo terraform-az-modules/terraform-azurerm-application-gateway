@@ -233,6 +233,12 @@ module "application-gateway" {
 ##-----------------------------------------------------------------------------
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
+resource "random_string" "vm_admin_username" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
 resource "random_password" "vm_admin_password" {
   length           = 20
   special          = true
@@ -265,7 +271,7 @@ module "virtual-machine" {
   ## Virtual Machine
   vm_size                         = "Standard_B1s"
   public_key                      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC7fYxQhR2gQ3b1Q0d8vX3z9jKf2x6w8T8L9R7c1P4mN2qK5yZ8eV6uJ3sD0aB1cE4fG7hI9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2fG5hI8jK1lM4nO7pQ0rS3tU6vW9xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0fG3hI6jK9lM2nO5pQ8rS1tU4vW7xY0zA3bC6dE9fG2hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8fG1hI4jK7lM0nO3pQ6rS9tU2vW5xY8zA1bC4dE7fG0hI3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6fG9hI2jK5lM8nO1pQ4rS7tU0vW3xY6zA9 example@terraform-az-modules"
-  admin_username                  = "ubuntu"
+  admin_username                  = "az${random_string.vm_admin_username.result}"
   admin_password                  = random_password.vm_admin_password.result
   disable_password_authentication = true
   caching                         = "ReadWrite"
