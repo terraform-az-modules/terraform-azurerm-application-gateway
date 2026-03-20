@@ -10,7 +10,7 @@ jobs:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/complete/'
-      provider: azurerm
+      provider: none
   
 # Seperate Job for TFlint workflow call
   tf-lint:
