@@ -76,20 +76,20 @@ module "security_group" {
       priority                   = 101
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "0.0.0.0/0"
+      source_address_prefix      = "VirtualNetwork"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "22"
-      description                = "ssh allowed port"
+      description                = "ssh allowed from VirtualNetwork only"
     },
     {
       name                       = "Http"
       priority                   = 102
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "0.0.0.0/0"
+      source_address_prefix      = "AzureApplicationGateway"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "80"
       description                = "Http allowed port"
     },
@@ -100,7 +100,7 @@ module "security_group" {
       protocol                   = "Tcp"
       source_address_prefix      = "0.0.0.0/0"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "443"
       description                = "Https allowed port"
     }
@@ -233,6 +233,18 @@ module "application-gateway" {
 ##-----------------------------------------------------------------------------
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
+resource "random_string" "vm_admin_username" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
+resource "random_password" "vm_admin_password" {
+  length           = 20
+  special          = true
+  override_special = "!@#%^*-_=+"
+}
+
 module "virtual-machine" {
   source  = "clouddrove/virtual-machine/azure"
   version = "2.0.3"
@@ -258,10 +270,10 @@ module "virtual-machine" {
   public_ip_enabled = true
   ## Virtual Machine
   vm_size                         = "Standard_B1s"
-  public_key                      = "ssh-rsa AAAA"
-  admin_username                  = "ubuntu"
-  admin_password                  = "admin@1234"
-  disable_password_authentication = false
+  public_key                      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC7fYxQhR2gQ3b1Q0d8vX3z9jKf2x6w8T8L9R7c1P4mN2qK5yZ8eV6uJ3sD0aB1cE4fG7hI9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2fG5hI8jK1lM4nO7pQ0rS3tU6vW9xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0fG3hI6jK9lM2nO5pQ8rS1tU4vW7xY0zA3bC6dE9fG2hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8fG1hI4jK7lM0nO3pQ6rS9tU2vW5xY8zA1bC4dE7fG0hI3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6fG9hI2jK5lM8nO1pQ4rS7tU0vW3xY6zA9 example@terraform-az-modules"
+  admin_username                  = "az${random_string.vm_admin_username.result}"
+  admin_password                  = random_password.vm_admin_password.result
+  disable_password_authentication = true
   caching                         = "ReadWrite"
   disk_size_gb                    = 30
   image_publisher                 = "Canonical"
