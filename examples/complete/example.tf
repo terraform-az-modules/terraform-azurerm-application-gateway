@@ -76,9 +76,9 @@ module "security_group" {
       priority                   = 101
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "0.0.0.0/0"
+      source_address_prefix      = "VirtualNetwork"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "22"
       description                = "ssh allowed port"
     },
@@ -87,9 +87,9 @@ module "security_group" {
       priority                   = 102
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "0.0.0.0/0"
+      source_address_prefix      = "VirtualNetwork"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "80"
       description                = "Http allowed port"
     },
@@ -98,9 +98,9 @@ module "security_group" {
       priority                   = 103
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "0.0.0.0/0"
+      source_address_prefix      = "VirtualNetwork"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "443"
       description                = "Https allowed port"
     }
@@ -260,8 +260,8 @@ module "virtual-machine" {
   vm_size                         = "Standard_B1s"
   public_key                      = "ssh-rsa AAAA"
   admin_username                  = "ubuntu"
-  admin_password                  = "admin@1234"
-  disable_password_authentication = false
+  admin_password                  = null
+  disable_password_authentication = true
   caching                         = "ReadWrite"
   disk_size_gb                    = 30
   image_publisher                 = "Canonical"
