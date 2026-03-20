@@ -205,7 +205,7 @@ module "application-gateway" {
   http_listeners = [
     {
       name                           = "appgw-testgatewayhtln"
-      frontend_ip_configuration_name = "sappgw-feip"      # Using publicfront end ip name as http listener 
+      frontend_ip_configuration_name = "sappgw-feip"      # Using publicfront end ip name as http listener
       frontend_port_name             = "sappgw-feport-80" # Assign from frontend_port_settings
       ssl_certificate_name           = null
       host_name                      = null
@@ -286,11 +286,11 @@ module "virtual-machine" {
     auto_upgrade_minor_version     = true
     automatic_upgrade_enabled      = false
   }]
-  # 
+  #
   #### enable diagnostic setting
   diagnostic_setting_enable = false
   #   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
-  # 
+  #
   #vm With User Data
   #   user_data = base64encode(file("user-data.sh"))
 }
