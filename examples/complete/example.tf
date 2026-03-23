@@ -29,7 +29,7 @@ module "resource_group" {
 
 module "vnet" {
   source                 = "terraform-az-modules/vnet/azurerm"
-  version                = "1.0.3"
+  version                = "1.0.4"
   name                   = local.name
   label_order            = local.label_order
   environment            = local.environment
