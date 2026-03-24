@@ -65,7 +65,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "security_group" {
   source              = "terraform-az-modules/nsg/azurerm"
-  version             = "1.0.6"
+  version             = "1.0.7"
   name                = local.name
   environment         = local.environment
   location            = module.resource_group.resource_group_location
