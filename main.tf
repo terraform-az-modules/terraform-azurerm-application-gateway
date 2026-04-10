@@ -36,7 +36,7 @@ resource "azurerm_application_gateway" "main" {
   name                = var.resource_position_prefix ? format("appgw-%s", local.name) : format("%s-appgw", local.name)
   resource_group_name = var.resource_group_name
   location            = local.location
-  enable_http2        = var.enable_http2
+  http2_enabled       = var.http2_enabled
   zones               = var.zones
   firewall_policy_id  = var.firewall_policy_id != null ? var.firewall_policy_id : null
   tags                = module.labels.tags
