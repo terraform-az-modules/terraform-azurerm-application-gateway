@@ -19,7 +19,7 @@ variable "location" {
   description = "The location/region to keep all your network resources."
 }
 
-variable "enable_http2" {
+variable "http2_enabled" {
   type        = bool
   default     = false
   description = "Is HTTP2 enabled on the application gateway resource?"
