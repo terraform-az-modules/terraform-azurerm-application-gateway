@@ -13,3 +13,7 @@ locals {
   location                        = var.location
   subnet_id                       = var.subnet_id
 }
+
+locals {
+  application_gateway_id = var.enable_ignore_changes ? azurerm_application_gateway.main_with_lifecycle[0].id : azurerm_application_gateway.main_without_lifecycle[0].id
+}

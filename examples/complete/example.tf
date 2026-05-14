@@ -133,8 +133,9 @@ module "application-gateway" {
   environment         = local.environment
   subnet_id           = module.subnet.subnet_ids["subnet2"]
   # virtual_network_id  = module.vnet.vnet_id
-  enable_diagnostic = true
-  workspace_id      = module.log-analytics.workspace_id
+  enable_diagnostic     = true
+  workspace_id          = module.log-analytics.workspace_id
+  enable_ignore_changes = true
 
   sku = {
     name     = "Standard_v2"
@@ -255,7 +256,7 @@ module "virtual-machine" {
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
   ## Public IP
-  public_ip_enabled = true
+  public_ip_enabled = false
   ## Virtual Machine
   vm_size                         = "Standard_B1s"
   public_key                      = "ssh-rsa AAAA"
