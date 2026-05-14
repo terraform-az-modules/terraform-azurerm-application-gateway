@@ -135,7 +135,7 @@ module "application-gateway" {
   # virtual_network_id  = module.vnet.vnet_id
   enable_diagnostic     = true
   workspace_id          = module.log-analytics.workspace_id
-  enable_ignore_changes = true
+  enable_ignore_changes = false
 
   sku = {
     name     = "Standard_v2"

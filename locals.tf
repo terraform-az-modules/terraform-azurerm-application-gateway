@@ -15,5 +15,5 @@ locals {
 }
 
 locals {
-  application_gateway_id = var.enable_ignore_changes ? azurerm_application_gateway.main_with_lifecycle[0].id : azurerm_application_gateway.main_without_lifecycle[0].id
+  application_gateway_id = one(concat(azurerm_application_gateway.main_with_lifecycle[*].id, azurerm_application_gateway.main_without_lifecycle[*].id))
 }
