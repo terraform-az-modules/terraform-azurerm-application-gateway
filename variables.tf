@@ -522,3 +522,9 @@ variable "appgw_logs" {
   }
   description = "values for Application gateway logs. The `category` attribute is optional and can be used to specify which categories of logs to enable. If not specified, all categories will be enabled."
 }
+
+variable "enable_ignore_changes" {
+  type        = bool
+  default     = false
+  description = "Enable ignore_changes lifecycle block for Application Gateway"
+}
