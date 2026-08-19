@@ -51,8 +51,8 @@ resource "azurerm_application_gateway" "main" {
   dynamic "autoscale_configuration" {
     for_each = var.autoscale_configuration != null ? [var.autoscale_configuration] : []
     content {
-      min_capacity = lookup(autoscale_configuration.value, "min_capacity")
-      max_capacity = lookup(autoscale_configuration.value, "max_capacity")
+      min_capacity = autoscale_configuration.value.min_capacity
+      max_capacity = autoscale_configuration.value.max_capacity
     }
   }
 
@@ -123,7 +123,7 @@ resource "azurerm_application_gateway" "main" {
       probe_name                          = lookup(backend_http_settings.value, "probe_name", null)
       protocol                            = backend_http_settings.value.enable_https ? "Https" : "Http"
       request_timeout                     = lookup(backend_http_settings.value, "request_timeout", 30)
-      host_name                           = backend_http_settings.value.pick_host_name_from_backend_address == false ? lookup(backend_http_settings.value, "host_name") : null
+      host_name                           = backend_http_settings.value.pick_host_name_from_backend_address == false ? backend_http_settings.value.host_name : null
       pick_host_name_from_backend_address = lookup(backend_http_settings.value, "pick_host_name_from_backend_address", false)
 
       dynamic "authentication_certificate" {
@@ -269,7 +269,7 @@ resource "azurerm_application_gateway" "main" {
       default_rewrite_rule_set_name       = lookup(url_path_map.value, "default_rewrite_rule_set_name", null)
 
       dynamic "path_rule" {
-        for_each = lookup(url_path_map.value, "path_rules")
+        for_each = url_path_map.value.path_rules
         content {
           name                        = path_rule.value.name
           backend_address_pool_name   = path_rule.value.backend_address_pool_name
