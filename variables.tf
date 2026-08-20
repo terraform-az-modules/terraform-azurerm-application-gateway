@@ -161,15 +161,6 @@ variable "request_routing_rules" {
   description = "List of Request routing rules to be used for listeners."
 }
 
-variable "authentication_certificates" {
-  type = list(object({
-    name = string
-    data = string
-  }))
-  default     = []
-  description = "Authentication certificates to allow the backend with Azure Application Gateway"
-}
-
 variable "trusted_root_certificates" {
   type = list(object({
     name = string
