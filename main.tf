@@ -126,12 +126,6 @@ resource "azurerm_application_gateway" "main" {
       host_name                           = backend_http_settings.value.pick_host_name_from_backend_address == false ? backend_http_settings.value.host_name : null
       pick_host_name_from_backend_address = lookup(backend_http_settings.value, "pick_host_name_from_backend_address", false)
 
-      dynamic "authentication_certificate" {
-        for_each = backend_http_settings.value.authentication_certificate != null ? [backend_http_settings.value.authentication_certificate] : []
-        content {
-          name = authentication_certificate.value.name
-        }
-      }
 
       trusted_root_certificate_names = lookup(backend_http_settings.value, "trusted_root_certificate_names", null)
 
@@ -181,17 +175,6 @@ resource "azurerm_application_gateway" "main" {
       rewrite_rule_set_name       = lookup(request_routing_rule.value, "rewrite_rule_set_name", null)
       url_path_map_name           = lookup(request_routing_rule.value, "url_path_map_name", null)
       priority                    = request_routing_rule.value.priority
-    }
-  }
-
-  #----------------------------------------------------------
-  # Authentication SSL Certificate Configuration (Optional)
-  #----------------------------------------------------------
-  dynamic "authentication_certificate" {
-    for_each = var.authentication_certificates
-    content {
-      name = authentication_certificate.value.name
-      data = filebase64(authentication_certificate.value.data)
     }
   }
 
