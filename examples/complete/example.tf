@@ -113,7 +113,7 @@ module "security_group" {
 # ------------------------------------------------------------------------------
 module "log-analytics" {
   source                      = "terraform-az-modules/log-analytics/azurerm"
-  version                     = "2.0.0"
+  version                     = "2.1.0"
   name                        = local.name
   environment                 = local.environment
   location                    = module.resource_group.resource_group_location
