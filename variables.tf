@@ -161,15 +161,6 @@ variable "request_routing_rules" {
   description = "List of Request routing rules to be used for listeners."
 }
 
-variable "authentication_certificates" {
-  type = list(object({
-    name = string
-    data = string
-  }))
-  default     = []
-  description = "Authentication certificates to allow the backend with Azure Application Gateway"
-}
-
 variable "trusted_root_certificates" {
   type = list(object({
     name = string
@@ -373,104 +364,6 @@ variable "private_link_configuration" {
   }))
   default     = []
   description = "List of private link configurations for Application Gateway."
-}
-
-variable "request_body_inspect_limit_in_kb" {
-  type        = number
-  default     = 128
-  description = "The maximum request body inspection size in KB for the policy."
-
-  validation {
-    condition     = var.request_body_inspect_limit_in_kb >= 8 && var.request_body_inspect_limit_in_kb <= 2000
-    error_message = "The request body inspection limit must be between 8 and 2000 KB."
-  }
-}
-
-variable "max_request_body_size_in_kb" {
-  type        = number
-  default     = 128
-  description = "The maximum request body size in KB for the policy."
-
-  validation {
-    condition     = var.max_request_body_size_in_kb >= 8 && var.max_request_body_size_in_kb <= 2000
-    error_message = "The request body size must be between 8 and 2000 KB."
-  }
-}
-
-variable "file_upload_limit_in_mb" {
-  type        = number
-  default     = 100
-  description = "The maximum file upload size in MB for the policy."
-
-  validation {
-    condition     = var.file_upload_limit_in_mb >= 1 && var.file_upload_limit_in_mb <= 4000
-    error_message = "The file upload limit must be between 1 and 4000 MB."
-  }
-}
-
-
-variable "managed_rule_exclusions" {
-  type = list(object({
-    match_variable          = string
-    selector_match_operator = string
-    selector                = string
-    rule_set = optional(object({
-      type = string
-      rule_groups = optional(list(object({
-        rule_group_name = string
-        excluded_rules  = list(number)
-      })), [])
-    }))
-  }))
-  default     = []
-  description = "A mapping of managed rule exclusions to associate with the policy."
-
-  validation {
-    condition = alltrue([for exclusion in var.managed_rule_exclusions : contains([
-      "RequestArgKeys", "RequestArgNames", "RequestArgValues",
-      "RequestCookieKeys", "RequestCookieNames", "RequestCookieValues",
-      "RequestHeaderKeys", "RequestHeaderNames", "RequestHeaderValues"
-    ], exclusion.match_variable)])
-    error_message = "All managed rule exclusion match variables must be RequestArgKeys, RequestArgNames, RequestArgValues, RequestCookieKeys, RequestCookieNames, RequestCookieValues, RequestHeaderKeys, RequestHeaderNames or RequestHeaderValues."
-  }
-
-  validation {
-    condition     = alltrue([for exclusion in var.managed_rule_exclusions : contains(["Contains", "EndsWith", "Equals", "EqualsAny", "StartsWith"], exclusion.selector_match_operator)])
-    error_message = "All managed rule exclusion selector match operators must be Contains, EndsWith, Equals, EqualsAny or StartsWith."
-  }
-
-  validation {
-    condition     = alltrue([for exclusion in var.managed_rule_exclusions : contains(["OWASP", "Microsoft_DefaultRuleSet"], exclusion.rule_set.type) if exclusion.rule_set != null])
-    error_message = "All managed rule exclusion rule set types must be OWASP or Microsoft_DefaultRuleSet."
-  }
-
-  validation {
-    condition = alltrue([for exclusion in var.managed_rule_exclusions :
-      alltrue([for rule_group in exclusion.rule_set.rule_groups :
-        contains([
-          "BadBots", "crs_20_protocol_violations", "crs_21_protocol_anomalies", "crs_23_request_limits", "crs_30_http_policy", "crs_35_bad_robots",
-          "crs_40_generic_attacks", "crs_41_sql_injection_attacks", "crs_41_xss_attacks", "crs_42_tight_security", "crs_45_trojans", "crs_49_inbound_blocking",
-          "General", "GoodBots", "KnownBadBots", "Known-CVEs", "REQUEST-911-METHOD-ENFORCEMENT", "REQUEST-913-SCANNER-DETECTION", "REQUEST-920-PROTOCOL-ENFORCEMENT",
-          "REQUEST-921-PROTOCOL-ATTACK", "REQUEST-930-APPLICATION-ATTACK-LFI", "REQUEST-931-APPLICATION-ATTACK-RFI", "REQUEST-932-APPLICATION-ATTACK-RCE",
-          "REQUEST-933-APPLICATION-ATTACK-PHP", "REQUEST-941-APPLICATION-ATTACK-XSS", "REQUEST-942-APPLICATION-ATTACK-SQLI", "REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION",
-          "REQUEST-944-APPLICATION-ATTACK-JAVA", "UnknownBots", "METHOD-ENFORCEMENT", "PROTOCOL-ENFORCEMENT", "PROTOCOL-ATTACK", "LFI", "RFI", "RCE", "PHP", "NODEJS", "XSS",
-          "SQLI", "FIX", "JAVA", "MS-ThreatIntel-WebShells", "MS-ThreatIntel-AppSec", "MS-ThreatIntel-SQLI", "MS-ThreatIntel-CVEs", "MS-ThreatIntel-AppSec", "MS-ThreatIntel-SQLI",
-          "MS-ThreatIntel-CVEs"
-        ], rule_group.rule_group_name)
-    ]) if exclusion.rule_set != null])
-    error_message = "All managed rule exclusion rule group names must be BadBots, crs_20_protocol_violations, crs_21_protocol_anomalies, crs_23_request_limits, crs_30_http_policy, crs_35_bad_robots, crs_40_generic_attacks, crs_41_sql_injection_attacks, crs_41_xss_attacks, crs_42_tight_security, crs_45_trojans, crs_49_inbound_blocking, General, GoodBots, KnownBadBots, Known-CVEs, REQUEST-911-METHOD-ENFORCEMENT, REQUEST-913-SCANNER-DETECTION, REQUEST-920-PROTOCOL-ENFORCEMENT, REQUEST-921-PROTOCOL-ATTACK, REQUEST-930-APPLICATION-ATTACK-LFI, REQUEST-931-APPLICATION-ATTACK-RFI, REQUEST-932-APPLICATION-ATTACK-RCE, REQUEST-933-APPLICATION-ATTACK-PHP, REQUEST-941-APPLICATION-ATTACK-XSS, REQUEST-942-APPLICATION-ATTACK-SQLI, REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION, REQUEST-944-APPLICATION-ATTACK-JAVA, UnknownBots, METHOD-ENFORCEMENT, PROTOCOL-ENFORCEMENT, PROTOCOL-ATTACK, LFI, RFI, RCE, PHP, NODEJS, XSS, SQLI, FIX, JAVA, MS-ThreatIntel-WebShells, MS-ThreatIntel-AppSec, MS-ThreatIntel-SQLI, MS-ThreatIntel-CVEs, MS-ThreatIntel-AppSec, MS-ThreatIntel-SQLI and MS-ThreatIntel-CVEs"
-  }
-
-  validation {
-    condition = alltrue([for exclusion in var.managed_rule_exclusions :
-      alltrue([for rule_group in exclusion.rule_set.rule_groups :
-        alltrue([for rule in rule_group.excluded_rules :
-          can(regex("^[0-9]{6}$", tonumber(rule)))
-        ])
-      ]) if exclusion.rule_set != null]
-    )
-    error_message = "All managed rule exclusion rules must be 6-digit numbers."
-  }
 }
 
 variable "enabled" {
