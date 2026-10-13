@@ -20,7 +20,7 @@ locals {
 
 module "resource_group" {
   source      = "terraform-az-modules/resource-group/azurerm"
-  version     = "1.0.3"
+  version     = "1.0.4"
   name        = local.name
   environment = local.environment
   label_order = local.label_order
@@ -65,7 +65,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "security_group" {
   source              = "terraform-az-modules/nsg/azurerm"
-  version             = "1.0.6"
+  version             = "1.0.7"
   name                = local.name
   environment         = local.environment
   location            = module.resource_group.resource_group_location
@@ -234,8 +234,8 @@ module "application-gateway" {
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
-  source  = "clouddrove/virtual-machine/azure"
-  version = "2.0.3"
+  source  = "terraform-az-modules/virtual-machine/azurerm"
+  version = "1.3.0"
   #   depends_on          = [module.key_vault]
   name                = local.name
   environment         = local.environment
@@ -249,7 +249,7 @@ module "virtual-machine" {
     },
   }
   ## Network Interface
-  subnet_id            = [module.subnet.subnet_ids["subnet1"]]
+  subnet_id            = module.subnet.subnet_ids["subnet1"]
   private_ip_addresses = ["10.0.0.4"]
   #nsg
   network_interface_sg_enabled = true
@@ -257,18 +257,19 @@ module "virtual-machine" {
   ## Public IP
   public_ip_enabled = true
   ## Virtual Machine
-  vm_size                         = "Standard_B1s"
-  public_key                      = "ssh-rsa AAAA"
-  admin_username                  = "ubuntu"
-  admin_password                  = "admin@1234"
-  disable_password_authentication = false
-  caching                         = "ReadWrite"
-  disk_size_gb                    = 30
-  image_publisher                 = "Canonical"
-  image_offer                     = "0001-com-ubuntu-server-jammy"
-  image_sku                       = "22_04-lts-gen2"
-  image_version                   = "latest"
-  enable_disk_encryption_set      = false
+  vm_size                          = "Standard_B1s"
+  public_key                       = "ssh-rsa AAAA"
+  admin_username                   = "ubuntu"
+  admin_password                   = "admin@1234"
+  disable_password_authentication  = false
+  caching                          = "ReadWrite"
+  disk_size_gb                     = 30
+  image_publisher                  = "Canonical"
+  image_offer                      = "0001-com-ubuntu-server-jammy"
+  image_sku                        = "22_04-lts-gen2"
+  image_version                    = "latest"
+  enable_disk_encryption_set       = false
+  enable_maintenance_configuration = false
   #   key_vault_id               = module.key_vault.id
   data_disks = [
     {
