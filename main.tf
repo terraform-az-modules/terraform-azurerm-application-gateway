@@ -352,6 +352,7 @@ resource "azurerm_user_assigned_identity" "identity" {
   name                = var.resource_position_prefix ? format("uai-appgw-%s", local.name) : format("%s-uai-appgw", local.name)
   location            = local.location
   resource_group_name = var.resource_group_name
+  tags                = module.labels.tags
 }
 
 ##-----------------------------------------------------------------------------
