@@ -235,7 +235,7 @@ module "application-gateway" {
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
   source  = "terraform-az-modules/virtual-machine/azurerm"
-  version = "1.3.0"
+  version = "1.4.0"
   #   depends_on          = [module.key_vault]
   name                = local.name
   environment         = local.environment
